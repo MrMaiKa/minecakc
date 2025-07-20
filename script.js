@@ -196,6 +196,21 @@ function exportData() {
   a.click();
 }
 
+function saveDataToSite() {
+  const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "minecraft_craft_data (20).json";
+  a.click();
+}
+
+function clearData() {
+  for (const key in items) {
+    delete items[key];
+  }
+  renderItemList();
+}
+
 function importData(event) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -206,6 +221,18 @@ function importData(event) {
   };
   reader.readAsText(file);
 }
+
+function loadDefaultData() {
+  fetch('minecraft_craft_data (20).json')
+    .then(r => r.json())
+    .then(data => {
+      Object.assign(items, data);
+      renderItemList();
+    })
+    .catch(err => console.error('Error loading default data:', err));
+}
+
+document.addEventListener('DOMContentLoaded', loadDefaultData);
 
 
 document.addEventListener("DOMContentLoaded", function () {
