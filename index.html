@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<title>Minecraft Craft Editor</title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<div class="container-main">
+<!-- Левая панель -->
+<div class="left-panel">
+<div class="card">
+<h3>💾 Сохранение и загрузка</h3>
+<button onclick="exportData()">💾 Экспорт JSON</button>
+<input id="loadFile" onchange="importData(event)" type="file"/>
+</div>
+<div class="wide-card">
+<h3>📦 Все предметы:</h3>
+
+<div style="position: sticky; top: 0; background: rgba(20,30,40,0.95); padding-bottom: 12px; z-index: 10;">
+  <input type="text" id="itemSearch" placeholder="🔍 Поиск предмета..." 
+    style="width: 100%; padding: 6px 10px; border-radius: 6px; border: 1px solid #00c6ff; background: rgba(255, 255, 255, 0.05); color: #f0f0f0; margin-bottom: 6px;" />
+  <button id="searchItemBtn" style="width: 100%; padding: 8px; border: none; border-radius: 6px; background: #00c6ff; color: white; font-weight: bold; cursor: pointer;">Найти предмет</button>
+</div>
+
+<div id="itemList" style="max-height: 300px; overflow-y: auto; padding-right: 6px;"></div>
+
+</div>
+</div>
+<!-- Центральная панель -->
+<div class="center-panel">
+<div class="card" style="width:320px;max-width:340px;">
+<h2>🎮 Новый предмет</h2>
+<label>Имя: <input id="itemName"/></label><br/>
+<label>ID: <input id="itemID"/></label><br/>
+<label>Кол-во на выходе: <input id="itemOutputCount" min="1" style="width:60px" type="number" value="1"/></label><br/>
+<label style="display:none;">Текстовый рецепт:
+          <textarea id="itemRecipe" placeholder="например: 2*Железо,1*Палка" rows="2" style="width:92%;"></textarea>
+</label>
+</div>
+</div>
+<!-- Правая панель -->
+<div class="right-panel">
+<div style="display: flex; flex-direction: row; gap: 16px; align-items: stretch; width: 100%;">
+<div class="card" style="width:490px; max-width:620px;">
+<h3>🖼️ Вставь изображение Ctrl+V</h3>
+<div contenteditable="true" id="pasteArea">Вставь изображение сюда</div>
+</div>
+<div class="output-card" id="result" style="min-width:370px; background:#e0e1e6; color:#151618;">
+<h3>Изначальных предметов</h3>
+</div>
+</div>
+<div class="card" style="align-items:center; width:300px; max-width:340px; margin-top:20px;">
+<h3 style="text-align:center;">🛠️ Верстак 9×9</h3>
+<table id="craftGrid"><tbody></tbody></table>
+<div class="buttons-row">
+<button onclick="addItem()">Добавить предмет</button>
+<button onclick="calculateResources()">📊 Посчитать ресурсы</button>
+</div>
+</div>
+</div>
+</div>
+
+<script src="script.js"></script>
+<button id="scrollTopBtn" title="Наверх">↑</button>
+
+
+
+
+
+<div id="minecraftPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+  background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; flex-direction:column; text-align:center;">
+  <img src="https://i.ytimg.com/vi/7fFXeg21GzI/maxresdefault.jpg" alt="Стив" style="max-width:300px; border-radius:12px; box-shadow:0 0 20px #00c6ff;">
+  <h1 style="color:#fff; font-size:2em; margin-top:20px;">Майнкрафт моя жЫзнь!!!!!!</h1>
+  <button id="closePopupBtn" style="margin-top: 24px; padding: 10px 20px; font-size: 16px; background-color: #00c6ff; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    Закрыть
+  </button>
+  <audio id="soundYuhu" src="https://www.myinstants.com/media/sounds/yahoo.mp3"></audio>
+  <audio id="soundOhYeah" src="https://www.myinstants.com/media/sounds/oh-yeah.mp3"></audio>
+</div>
+
+</body>
+</html>
