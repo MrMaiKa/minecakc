@@ -1,6 +1,5 @@
 
 const items = {};
-const STORAGE_KEY = 'minecraftCraftData';
 let pastedImageURL = "";
 
 const grid = document.getElementById("craftGrid").querySelector("tbody");
@@ -175,10 +174,10 @@ function exportInitialItems() {
   const lines = resultDiv.innerHTML.split("<br>").slice(1); // пропускаем заголовок
   const exportObj = {};
   for (const line of lines) {
-    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s(\d+)/);
+    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
     if (matches) {
       const id = matches[1].trim();
-      const qty = parseInt(matches[2], 10);
+      const qty = Math.ceil(parseFloat(matches[2]));
       exportObj[id] = qty;
     }
   }
@@ -197,16 +196,34 @@ function exportData() {
   a.click();
 }
 
-function saveDataToSite() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  alert('Данные сохранены на сайте');
+async function saveDataToSite() {
+  const data = JSON.stringify(items, null, 2);
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'minecraft_craft_data (20).json',
+        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(data);
+      await writable.close();
+      alert('Файл обновлен');
+      return;
+    } catch (err) {
+      console.error('File save canceled or failed', err);
+    }
+  }
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'minecraft_craft_data (20).json';
+  a.click();
 }
 
 function clearData() {
   for (const key in items) {
     delete items[key];
   }
-  localStorage.removeItem(STORAGE_KEY);
   renderItemList();
 }
 
@@ -217,12 +234,11 @@ function importData(event) {
     const data = JSON.parse(reader.result);
     Object.assign(items, data);
     renderItemList();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   };
   reader.readAsText(file);
 }
 
-function loadDefaultData() {
+function loadFromSite() {
   fetch('minecraft_craft_data (20).json')
     .then(r => r.json())
     .then(data => {
@@ -232,25 +248,8 @@ function loadDefaultData() {
     .catch(err => console.error('Error loading default data:', err));
 }
 
-function loadFromStorage() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      const data = JSON.parse(saved);
-      Object.assign(items, data);
-      renderItemList();
-      return true;
-    } catch (e) {
-      console.error('Failed to parse saved data', e);
-    }
-  }
-  return false;
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  if (!loadFromStorage()) {
-    loadDefaultData();
-  }
+  loadFromSite();
 });
 
 
