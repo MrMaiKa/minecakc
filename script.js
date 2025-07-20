@@ -222,10 +222,17 @@ async function saveDataToSite() {
 }
 
 function downloadCraftsFile() {
-  const a = document.createElement('a');
-  a.href = 'minecraft_craft_data (20).json';
-  a.download = 'minecraft_craft_data (20).json';
-  a.click();
+  const fileName = 'minecraft_craft_data (20).json';
+  fetch(encodeURI(fileName))
+    .then(r => r.blob())
+    .then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(err => console.error('Error downloading file:', err));
 }
 
 function clearData() {
