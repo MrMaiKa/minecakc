@@ -171,7 +171,8 @@ function calculateResources(rootId = null) {
 
 function exportInitialItems() {
   const resultDiv = document.getElementById("result");
-  const lines = resultDiv.innerHTML.split("<br>").slice(1); // пропускаем заголовок
+  const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
+  const lines = withoutHeader.split("<br>");
   const exportObj = {};
   for (const line of lines) {
     const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
