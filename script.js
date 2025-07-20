@@ -221,6 +221,13 @@ async function saveDataToSite() {
   a.click();
 }
 
+function downloadCraftsFile() {
+  const a = document.createElement('a');
+  a.href = 'minecraft_craft_data (20).json';
+  a.download = 'minecraft_craft_data (20).json';
+  a.click();
+}
+
 function clearData() {
   for (const key in items) {
     delete items[key];
