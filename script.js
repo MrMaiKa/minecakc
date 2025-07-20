@@ -171,13 +171,14 @@ function calculateResources(rootId = null) {
 
 function exportInitialItems() {
   const resultDiv = document.getElementById("result");
-  const lines = resultDiv.innerHTML.split("<br>").slice(1); // пропускаем заголовок
+  const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
+  const lines = withoutHeader.split("<br>");
   const exportObj = {};
   for (const line of lines) {
-    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s(\d+)/);
+    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
     if (matches) {
       const id = matches[1].trim();
-      const qty = parseInt(matches[2], 10);
+      const qty = Math.ceil(parseFloat(matches[2]));
       exportObj[id] = qty;
     }
   }
@@ -196,6 +197,43 @@ function exportData() {
   a.click();
 }
 
+async function saveDataToSite() {
+  const data = JSON.stringify(items, null, 2);
+  try {
+    const response = await fetch('minecraft_craft_data (20).json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    });
+    if (!response.ok) throw new Error('Server error: ' + response.status);
+    alert('Файл на сайте обновлен');
+  } catch (err) {
+    console.error('Error saving data to site:', err);
+    alert('Не удалось обновить файл на сайте');
+  }
+}
+
+function downloadCraftsFile() {
+  const fileName = 'minecraft_craft_data (20).json';
+  fetch(encodeURI(fileName))
+    .then(r => r.blob())
+    .then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(err => console.error('Error downloading file:', err));
+}
+
+function clearData() {
+  for (const key in items) {
+    delete items[key];
+  }
+  renderItemList();
+}
+
 function importData(event) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -206,6 +244,20 @@ function importData(event) {
   };
   reader.readAsText(file);
 }
+
+function loadFromSite() {
+  fetch('minecraft_craft_data (20).json')
+    .then(r => r.json())
+    .then(data => {
+      Object.assign(items, data);
+      renderItemList();
+    })
+    .catch(err => console.error('Error loading default data:', err));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadFromSite();
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {
