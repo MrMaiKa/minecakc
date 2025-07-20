@@ -80,13 +80,18 @@ function renderItemList() {
   for (const id in items) {
     const item = items[id];
     const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" onclick="calculateResources('${id}')" style="cursor:pointer;" />` : "";
-    const recipeText = item.components?.length > 0
+    const hasComponents = item.components?.length > 0;
+    const recipeText = hasComponents
       ? item.components.map(c => `${c.qty}*${c.item}`).join(", ")
-      : "Рецепт через 9x9-сетку";
+      : "";
     const outputText = item.outputCount && item.outputCount > 1 ? ` (выход: ${item.outputCount})` : '';
     const entry = document.createElement("div");
     entry.className = "item-preview";
-    entry.innerHTML = `<strong> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}<br>Рецепт: ${recipeText}<br>`;
+    entry.innerHTML = `<strong> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}`;
+    if (recipeText) {
+      entry.innerHTML += `<br>Рецепт: ${recipeText}`;
+    }
+    entry.innerHTML += "<br>";
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Удалить";
