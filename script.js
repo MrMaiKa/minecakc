@@ -1,5 +1,6 @@
 
 const items = {};
+const STORAGE_KEY = 'minecraftCraftData';
 let pastedImageURL = "";
 
 const grid = document.getElementById("craftGrid").querySelector("tbody");
@@ -197,17 +198,15 @@ function exportData() {
 }
 
 function saveDataToSite() {
-  const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "minecraft_craft_data (20).json";
-  a.click();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  alert('Данные сохранены на сайте');
 }
 
 function clearData() {
   for (const key in items) {
     delete items[key];
   }
+  localStorage.removeItem(STORAGE_KEY);
   renderItemList();
 }
 
@@ -218,6 +217,7 @@ function importData(event) {
     const data = JSON.parse(reader.result);
     Object.assign(items, data);
     renderItemList();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   };
   reader.readAsText(file);
 }
@@ -232,7 +232,26 @@ function loadDefaultData() {
     .catch(err => console.error('Error loading default data:', err));
 }
 
-document.addEventListener('DOMContentLoaded', loadDefaultData);
+function loadFromStorage() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      Object.assign(items, data);
+      renderItemList();
+      return true;
+    } catch (e) {
+      console.error('Failed to parse saved data', e);
+    }
+  }
+  return false;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!loadFromStorage()) {
+    loadDefaultData();
+  }
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {
