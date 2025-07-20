@@ -130,6 +130,24 @@ input, textarea {
   color: #fff;
 }
 
+.file-input-btn {
+  background: transparent;
+  border: 1px solid #00c6ff;
+  color: #00c6ff;
+  padding: 4px 10px;
+  margin-right: 8px;
+  margin-top: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.file-input-btn:hover {
+  background: #00c6ff;
+  color: #fff;
+}
+
 
 #craftGrid {
   border-collapse: collapse;

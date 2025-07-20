@@ -14,10 +14,11 @@
 <h3>💾 Сохранение и загрузка</h3>
 <button onclick="exportData()">💾 Экспорт JSON</button>
 <button onclick="loadFromSite()">Загрузить с сайта</button>
-<button onclick="saveDataToSite()" style="display:none;">Обновить на сайте</button>
+<button onclick="saveDataToSite()">Сохранить на сайте</button>
 <button onclick="downloadCraftsFile()" style="display:none;">Скачать готовый набор крафтов</button>
-<button onclick="clearData()">Сбросить</button>
-<input id="loadFile" onchange="importData(event)" type="file"/>
+<button onclick="clearData()">Очистка</button>
+<label for="loadFile" class="file-input-btn">Выберите файл</label>
+<input id="loadFile" onchange="importData(event)" type="file" style="display:none"/>
 </div>
 <div class="wide-card">
 <h3>📦 Все предметы:</h3>
