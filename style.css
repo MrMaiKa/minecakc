@@ -176,3 +176,22 @@ input, textarea {
 #scrollTopBtn:hover {
   background-color: #0072ff;
 }
+#itemList {
+  scrollbar-color: #00c6ff rgba(20,30,40,0.8);
+  scrollbar-width: thin;
+}
+#itemList::-webkit-scrollbar {
+  width: 8px;
+}
+#itemList::-webkit-scrollbar-track {
+  background: rgba(20,30,40,0.8);
+  border-radius: 10px;
+}
+#itemList::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg,#00c6ff,#0072ff);
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0,198,255,0.4);
+}
+#itemList::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg,#0072ff,#00c6ff);
+}
