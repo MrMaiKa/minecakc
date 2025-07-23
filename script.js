@@ -174,25 +174,25 @@ function calculateResources(rootId = null) {
   document.getElementById("result").innerHTML = `<h3>Изначальных предметов</h3>` + lines.join("<br>") + `<br><button onclick="exportInitialItems()">Выгрузить в JSON</button>`;
 }
 
-function exportInitialItems() {
-  const resultDiv = document.getElementById("result");
-  const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
-  const lines = withoutHeader.split("<br>");
-  const exportObj = {};
-  for (const line of lines) {
-    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
-    if (matches) {
-      const id = matches[1].trim();
-      const qty = Math.ceil(parseFloat(matches[2]));
-      exportObj[id] = qty;
+  function exportInitialItems() {
+    const resultDiv = document.getElementById("result");
+    const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
+    const lines = withoutHeader.split("<br>");
+    const exportArr = [];
+    for (const line of lines) {
+      const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
+      if (matches) {
+        const id = matches[1].trim();
+        const qty = Math.ceil(parseFloat(matches[2]));
+        exportArr.push({ id, count: qty });
+      }
     }
+    const blob = new Blob([JSON.stringify(exportArr, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "initial_items.json";
+    a.click();
   }
-  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "initial_items.json";
-  a.click();
-}
 
 function exportData() {
   const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
