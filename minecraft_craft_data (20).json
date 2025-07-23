@@ -1285,8 +1285,8 @@
   },
   "<minecraft:diamond>": {
     "id": "<minecraft:diamond>",
-    "name": "Кремниевый чип",
-    "texture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAlCAYAAAAnQjt6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAP4SURBVFhH1VhLTxNRGL0zfUmZlgKCloYWTEwMUYOJwRgfYIxGIMQHLkncGBMXbvwF/AF3xo0x0ejGFYR/YCJLXRl2xioaHhIqpZQ+plPvd+79ynQCkY04nubkzJ25k5nvzHfv/W6NV3Mv6kKiUqmQiHA4DPWiXkc3EW+LQ9d+rkEjkQg0l8tBOzo6oKVSCcrXy+UylNuMlpYWqHHv0RSe4O3ILxYKhaCGYUC9CAQC0FqtBuV+1WoVGgwGoY7jQE3ThDJGx29Am8/+QxjXrp5Vnktsb2/rIxfYiEav3RFQgQuH+ykD5CdVuheevn0J9Z8jhw8rRwL61RqB6cj4PMM0lVVOwwLV5hTg5I7o5C/rnIuEdLuq2k9ez0F940jjRYLyiKKmOIjkBJHOKTcoYkMEA4rFch3kNjlBJId2XBKiUKqAQXmRWLGrIGNzMw/iEX5A04tE5eRSkdMB0esER2zX6mAsGgDPX7oPXrisyJAmgCF5D3HbdsC6dJlo6B8Dj/IDGqMmnVLZ/Cu/AS0UIcKK8lur73723BSUMTg4COUZdmFhAfr+3XMoo6pHH7njxvSzN1D/OHKsvwehWq1oi2JpJ6MJmcxpfaTQ3d0NnZ+fhzJ40eO1aWhoCPot+wG6F0bG70D95EgSjsRkLhhytuzsPoELjFQqBZ2ZmYFyxOn1dagXn2Mx6OTkJHR5eRn6/etHqONZfK5M3IU2OVJ3TUQHjUAiEZumg1R6QEStLtHX1ycSiYRobW0V8XgcdQatG6urqyhiTsoIk3JNisp7iD8kqQRS5Y3E0aPo19vbK2dYR8SkQ5ZlydU5LuKJpNj4taQ7KhwfOCXnJ/Pgc8SQD3WTYfLiQvMAMZvNguQEkXKCWCgUQCoQVZHYDMoNzg8CVWZukkNg+gzIoEqO6J9R059Ro6brSC9OJJNJKEVP6Onpgc7OzkIZ7e3tUO5HeUAYHh6Gcj2ytNScE4zlpU/Q4dFbUB850qccsWgISLRYuzuTyWSgtm03KVfp3F5ZWYF6EY2qB/D1rcJXqP8dqdVVZFasH+p1Jp1OQzkHFhcXoQze1/DGyevQxoZyIhxU/S7duAn136jh1bdSU47oIl3E4rs7w/iTA0WdC8o/clIfaIyM+S5HPI7YjnLEC68zW1tb0Hw+D2Vs5r/oIxmlewrXzlVsZUlQFXTi4vUJ6P/jSFU3Q3pvy84wcjnlAI8Cd73hdqTGNSv30yXHyNht6F91hP+K2A/2fBH6pkRygmjLvQ6xWMiClAvufCAn3G5QShB5x0g7SSLvBPl84lAnaMpT+tZ/C+Ph4wcIw/uPEBcttv7nh6/zd+foeTTsF6be/7SF1erN2PPTHCyE+A0WgZjSOs9PTgAAAABJRU5ErkJggg==",
+    "name": "Алмаз",
+    "texture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAiCAYAAAA3WXuFAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARVSURBVFhHzZjbaxRnGMa/OaybxKQaDxjEC2lTm4LotTciCGIMLbW98qJ3Qv8G/4Je9cLeFRSRivVCxFMUlHhAJIKIVVpMD0kasoaEhBpdN5vd2d3xfd7vezezs3NKRPAHj+/MOrPz7PO98803sc5ePe3fG7mvQKPR4FqpVLjm83mu1WqVay6X42pZFtcwjuNwrdfrXOU4z/O4uq7LVa5j2zZXYXDosGr95COAE7pz+y7vzPz5N1cJwPd1rVTLXC0dgPJ1AO1IcOY8gc+jL/N1MM3vFeR6P/925iNM6OLIBf/a5eu8Iwn1bePSRBIKY5lI6LdzVb75qVYoAsJHQpK4binqKV3l6JPnrrx/QsMFW90oOFovaRui7bVil0ols6nHElpa1orDo16AYKb46GmkkkwhGRbFAeWMisU3a0/o9ozDF37uvVW/lmfbFDSF4cpKiyGcB3V1aHFPSF8QmFegoJlntbfmf1uBqYcPHrCpZZrGIBmBWk3LdVxW8DothqrecqRyTl7LzavhaT1MSWbAXrdbnShOqP5zP6m787gofdgm+icoInHI5BcJlyc9/tVZzYDtm7ZoUwvmliI61mkteXWW41gskNpDrk1nElemapxMGt939jXNCGLq5syKqTisb4597U+O/8c7i7NzXHu6uXCqNk2zfy021InjP6i5RpUFtpFR2Rb2UDLny/o7whTLS+r/S7dUf0+DnmE6jUZDD5NwYOhoekJiBgQNYBsGRGLwYL6XFcWmbw+pf4vJl7TlCRwEvlu9rxgAYmLUe9PURH2ZBWOoQWNIp6ezi7cBkgmnAyx6+ifa/ee11TJUz6mRxRRMhNmX+4Q/RxVz83+MNc2gpqVk1zAhGCw6DsJyxSxZ2oCpKIJmgnU1uLSeSh7QGJBWkNWYSUuJP8UKDsJ6BcLwRgxxJKsxE4dcDyvLTAkFE0FfCGsxgwZPwsazCWtgWQcnATMjlVfqwpPRVZmZHX3SVOn3FyyAQYAwLZmpKXsPiRmwdfeAOvn4fuZkOr/8rE1x8Ew9PVXgnYXCS67dZqYO3vZiRsDtnIV1O/rM1grVwqxaejamdnbpW9k1S6fUmfqLjbb68dQvbWZAvVjiiyUJx0QBM3iERMGG8D4F6XWvnkUh37wmhBsxrTGTQDrAdXOqI6+FbQik9tCuDUrhoSgmUNGUSX0g4Jjyi3Gzp0E6A73xy1sb8w/eTOXtFKDhTdO38D7JAEknTHDdlekuk5RA1nSEYEpp6QB6vbYpnQorjhpNUZ/SnQdTTs9682k2kArOWRy+1zSD74MEWcFiLoxNKPyHADDQa/GvxEXi4g8ix+CczzckJyNYR747TPPQNO+8npvnup5CgKFwH8lKb+wV5tfsSDKOrBTNgl5Skll6/+BX2XooDHoqShhWSPZhJK1nwtj4m4+8bwk5eleCkIikAsIrPWwFs8KMC4V7RKjTuZD0jENxQPI9Gzs2ry2hD4dS7wDk+Kf41KVnIQAAAABJRU5ErkJggg==",
     "components": [],
     "grid": [
       [
@@ -1327,7 +1327,7 @@
         "",
         "",
         "",
-        "<ProjRed|Core:projectred.core.part:13>",
+        "",
         "",
         "",
         "",
@@ -1337,9 +1337,9 @@
         "",
         "",
         "",
-        "<ProjRed|Core:projectred.core.part>",
-        "<ProjRed|Core:projectred.core.part>",
-        "<ProjRed|Core:projectred.core.part>",
+        "",
+        "",
+        "",
         "",
         "",
         ""
