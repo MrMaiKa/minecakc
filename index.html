@@ -13,7 +13,12 @@
 <div class="card">
 <h3>💾 Сохранение и загрузка</h3>
 <button onclick="exportData()">💾 Экспорт JSON</button>
-<input id="loadFile" onchange="importData(event)" type="file"/>
+<button onclick="loadFromSite()">Загрузить с сайта</button>
+<button onclick="saveDataToSite()">Сохранить на сайте</button>
+<button onclick="downloadCraftsFile()" style="display:none;">Скачать готовый набор крафтов</button>
+<button onclick="clearData()">Очистка</button>
+<label for="loadFile" class="file-input-btn">Выберите файл</label>
+<input id="loadFile" onchange="importData(event)" type="file" style="display:none"/>
 </div>
 <div class="wide-card">
 <h3>📦 Все предметы:</h3>
@@ -56,7 +61,7 @@
 <table id="craftGrid"><tbody></tbody></table>
 <div class="buttons-row">
 <button onclick="addItem()">Добавить предмет</button>
-<button onclick="calculateResources()">📊 Посчитать ресурсы</button>
+<button onclick="calculateResources()" style="display:none;">📊 Посчитать ресурсы</button>
 </div>
 </div>
 </div>
