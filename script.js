@@ -182,7 +182,7 @@ function calculateResources(rootId = null) {
     for (const line of lines) {
       const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
       if (matches) {
-        const id = matches[1].trim();
+        const id = matches[1].trim().replace(/[<>]/g, "");
         const qty = Math.ceil(parseFloat(matches[2]));
         exportArr.push({ id, count: qty });
       }
