@@ -960,7 +960,8 @@
         "",
         ""
       ]
-    ]
+    ],
+    "outputCount": 2
   },
   "<AdvancedSolarPanel:asp_crafting_items:8>": {
     "id": "<AdvancedSolarPanel:asp_crafting_items:8>",
@@ -2888,7 +2889,8 @@
         "",
         ""
       ]
-    ]
+    ],
+    "outputCount": 4
   },
   "<IC2:item.itemIngotAdvIron>": {
     "id": "<IC2:item.itemIngotAdvIron>",
@@ -3210,7 +3212,8 @@
         "",
         ""
       ]
-    ]
+    ],
+    "outputCount": 1
   },
   "<AdvancedSolarPanel:asp_crafting_items:4>": {
     "id": "<AdvancedSolarPanel:asp_crafting_items:4>",
@@ -3424,7 +3427,8 @@
         "",
         ""
       ]
-    ]
+    ],
+    "outputCount": 6
   },
   "<minecraft:glowstone_dust>": {
     "id": "<minecraft:glowstone_dust>",
@@ -12894,7 +12898,7 @@
         ""
       ]
     ],
-    "outputCount": 1
+    "outputCount": 2
   },
   "<IC2:item.adv_ic2cable>": {
     "id": "<IC2:item.adv_ic2cable>",
@@ -13002,7 +13006,7 @@
         ""
       ]
     ],
-    "outputCount": 1
+    "outputCount": 4
   },
   "<minecraft:planks:3>": {
     "id": "<minecraft:planks:3>",
@@ -14946,7 +14950,7 @@
         ""
       ]
     ],
-    "outputCount": 1
+    "outputCount": 8
   },
   "<minecraft:gold_nugget>": {
     "id": "<minecraft:gold_nugget>",
@@ -15162,7 +15166,7 @@
         ""
       ]
     ],
-    "outputCount": 1
+    "outputCount": 3
   },
   "<minecraft:reeds>": {
     "id": "<minecraft:reeds>",
@@ -15810,7 +15814,7 @@
         ""
       ]
     ],
-    "outputCount": 1
+    "outputCount": 2
   },
   "<IC2:item.ic2upgrades:1>": {
     "id": "<IC2:item.ic2upgrades:1>",
@@ -19158,7 +19162,7 @@
         ""
       ]
     ],
-    "outputCount": 1
+    "outputCount": 8
   },
   "<OpenComputers:item:43>": {
     "id": "<OpenComputers:item:43>",
