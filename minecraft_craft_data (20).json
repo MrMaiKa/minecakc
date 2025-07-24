@@ -4116,7 +4116,7 @@
         "",
         "<IC2:item.itemPartCarbonPlate>",
         "<IC2:item.itemPartAlloy>",
-        "<PowerUtils:pu_storage_module:1>",
+        "<dwcity:Circuit2>",
         "<IC2:item.itemPartAlloy>",
         "<IC2:item.itemPartCarbonPlate>",
         "",
@@ -4177,7 +4177,8 @@
         "",
         ""
       ]
-    ]
+    ],
+    "outputCount": 1
   },
   "<dwcity:Chip_64bit>": {
     "id": "<dwcity:Chip_64bit>",
