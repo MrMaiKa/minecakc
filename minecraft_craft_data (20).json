@@ -17004,114 +17004,6 @@
     ],
     "outputCount": 9
   },
-  "<IC2:blockMachine:12>м": {
-    "id": "<IC2:blockMachine:12>м",
-    "name": "Улучшенный корпус механзма",
-    "texture": "data:image/png;base64,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",
-    "components": [],
-    "grid": [
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "<IC2:item.itemPartCarbonPlate>",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "<IC2:item.itemPartAlloy>",
-        "<IC2:blockMachine>",
-        "<IC2:item.itemPartAlloy>",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "<IC2:item.itemPartCarbonPlate>",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ]
-    ],
-    "outputCount": 1
-  },
   "<StrangerMind:glassdust>": {
     "id": "<StrangerMind:glassdust>",
     "name": "Оловянная основа",
@@ -22148,6 +22040,114 @@
         "<IC2:item.itemIngotTin>",
         "<minecraft:redstone>",
         "<IC2:item.itemIngotTin>",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    ],
+    "outputCount": 1
+  },
+  "<IC2:blockMachine:12>": {
+    "id": "<IC2:blockMachine:12>",
+    "name": "Улучшенный корпус механзма",
+    "texture": "data:image/png;base64,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",
+    "components": [],
+    "grid": [
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "<IC2:item.itemPartCarbonPlate>",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "<IC2:item.itemPartAlloy>",
+        "<IC2:blockMachine>",
+        "<IC2:item.itemPartAlloy>",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "<IC2:item.itemPartCarbonPlate>",
+        "",
         "",
         "",
         ""
