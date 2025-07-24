@@ -48,23 +48,25 @@
 </div>
 <!-- Правая панель -->
 <div class="right-panel">
-<div style="display: flex; flex-direction: row; gap: 16px; align-items: flex-start; width: 100%;">
-<div class="card" style="width:490px; max-width:620px;">
-<h3>🖼️ Вставь изображение Ctrl+V</h3>
-<div contenteditable="true" id="pasteArea">Вставь изображение сюда</div>
-</div>
-<div class="output-card" id="result" style="min-width:370px; background:#CCFFFF; color:#151618;">
-<h3>Изначальных предметов</h3>
-</div>
-</div>
-<div class="card" style="align-items:center; width:300px; max-width:340px; margin-top:20px;">
-<h3 style="text-align:center;">🛠️ Верстак 9×9</h3>
-<table id="craftGrid"><tbody></tbody></table>
-<div class="buttons-row">
-<button onclick="addItem()">Добавить предмет</button>
-<button onclick="calculateResources()" style="display:none;">📊 Посчитать ресурсы</button>
-</div>
-</div>
+  <div style="display: flex; flex-direction: row; gap: 16px; align-items: flex-start; width: 100%;">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="card" style="width:490px; max-width:620px;">
+        <h3>🖼️ Вставь изображение Ctrl+V</h3>
+        <div contenteditable="true" id="pasteArea">Вставь изображение сюда</div>
+      </div>
+      <div class="card" style="align-items:center; width:300px; max-width:340px;">
+        <h3 style="text-align:center;">🛠️ Верстак 9×9</h3>
+        <table id="craftGrid"><tbody></tbody></table>
+        <div class="buttons-row">
+          <button onclick="addItem()">Добавить предмет</button>
+          <button onclick="calculateResources()" style="display:none;">📊 Посчитать ресурсы</button>
+        </div>
+      </div>
+    </div>
+    <div class="output-card" id="result" style="min-width:370px; background:#CCFFFF; color:#151618;">
+      <h3>Изначальных предметов</h3>
+    </div>
+  </div>
 </div>
 </div>
 
