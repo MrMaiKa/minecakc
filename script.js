@@ -101,7 +101,7 @@ function renderItemList() {
 
   for (const id in items) {
     const item = items[id];
-    const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" onclick="calculateResources('${id}')" style="cursor:pointer;" />` : "";
+    const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" />` : "";
     const hasComponents = item.components?.length > 0;
     const recipeText = hasComponents
       ? item.components.map(c => `${c.qty}*${c.item}`).join(", ")
@@ -109,7 +109,7 @@ function renderItemList() {
     const outputText = item.outputCount && item.outputCount > 1 ? ` (выход: ${item.outputCount})` : '';
     const entry = document.createElement("div");
     entry.className = "item-preview";
-    entry.innerHTML = `<strong> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}`;
+    entry.innerHTML = `<strong class="item-header"> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}`;
     if (recipeText) {
       entry.innerHTML += `<br>Рецепт: ${recipeText}`;
     }
@@ -142,7 +142,12 @@ function renderItemList() {
     };
     entry.appendChild(editBtn);
 
-    entry.addEventListener("click", () => calculateResources(id));
+    const header = entry.querySelector(".item-header");
+    if (header) {
+      header.style.cursor = "pointer";
+      header.addEventListener("click", () => calculateResources(id));
+    }
+
     container.appendChild(entry);
   }
 }
