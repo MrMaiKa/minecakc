@@ -40,6 +40,7 @@
 <label>Имя: <input id="itemName"/></label><br/>
 <label>ID: <input id="itemID"/></label><br/>
 <label>Кол-во на выходе: <input id="itemOutputCount" min="1" style="width:60px" type="number" value="1"/></label><br/>
+<button id="manualInputBtn" onclick="toggleManualInput()">Ручной ввод</button>
 <label style="display:none;">Текстовый рецепт:
           <textarea id="itemRecipe" placeholder="например: 2*Железо,1*Палка" rows="2" style="width:92%;"></textarea>
 </label>
@@ -52,7 +53,7 @@
 <h3>🖼️ Вставь изображение Ctrl+V</h3>
 <div contenteditable="true" id="pasteArea">Вставь изображение сюда</div>
 </div>
-<div class="output-card" id="result" style="min-width:370px; background:#e0e1e6; color:#151618;">
+<div class="output-card" id="result" style="min-width:370px; background:#CCFFFF; color:#151618;">
 <h3>Изначальных предметов</h3>
 </div>
 </div>
