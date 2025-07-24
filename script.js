@@ -154,38 +154,57 @@ function calculateResources(rootId = null) {
     return Object.keys(items).find(key => input && key.includes(input.trim()));
   }
 
-  function collect(id, multiplier = 1) {
+  const baseCache = {};
+  function getBaseCounts(id, visited = new Set()) {
     const cleanId = normalizeId(id);
     if (!cleanId) {
-      console.warn('Неизвестный ID:', id);
-      result[id] = (result[id] || 0) + multiplier;
-      return;
+      return { [id]: 1 };
     }
+    if (baseCache[cleanId]) return baseCache[cleanId];
+    if (visited.has(cleanId)) return {};
+    visited.add(cleanId);
 
     const item = items[cleanId];
     const outputCount = item.outputCount || 1;
-    const normMultiplier = multiplier / outputCount;
+    const normMultiplier = 1 / outputCount;
     const isGridEmpty = item.grid.every(row => row.every(cell => cell === ""));
 
+    const base = {};
     if (item.components.length > 0) {
       for (const comp of item.components) {
-        collect(comp.item, comp.qty * normMultiplier);
+        const sub = getBaseCounts(comp.item, visited);
+        for (const k in sub) {
+          base[k] = (base[k] || 0) + sub[k] * comp.qty * normMultiplier;
+        }
       }
     } else if (!isGridEmpty) {
       const flat = item.grid.flat().filter(x => x);
       for (const subId of flat) {
-        collect(subId, normMultiplier);
+        const sub = getBaseCounts(subId, visited);
+        for (const k in sub) {
+          base[k] = (base[k] || 0) + sub[k] * normMultiplier;
+        }
       }
     } else {
-      result[cleanId] = (result[cleanId] || 0) + multiplier;
+      base[cleanId] = normMultiplier;
+    }
+
+    baseCache[cleanId] = base;
+    visited.delete(cleanId);
+    return base;
+  }
+
+  function addToResult(map, multiplier = 1) {
+    for (const k in map) {
+      result[k] = (result[k] || 0) + map[k] * multiplier;
     }
   }
 
   if (rootId) {
-    collect(rootId);
+    addToResult(getBaseCounts(rootId));
   } else {
     const lastId = document.getElementById("itemID").value.trim();
-    if (lastId) collect(lastId);
+    if (lastId) addToResult(getBaseCounts(lastId));
   }
 
   const lines = Object.entries(result).map(([id, qty]) => {
