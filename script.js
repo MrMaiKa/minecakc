@@ -8,10 +8,29 @@ for (let r = 0; r < 9; r++) {
   for (let c = 0; c < 9; c++) {
     const td = document.createElement("td");
     const input = document.createElement("input");
+    input.addEventListener("input", () => updateCellImage(input));
     td.appendChild(input);
     tr.appendChild(td);
   }
   grid.appendChild(tr);
+}
+
+function updateCellImage(input) {
+  const val = input.value.trim();
+  const item = items[val];
+  if (item && item.texture) {
+    input.style.backgroundImage = `url(${item.texture})`;
+    input.style.backgroundSize = "cover";
+    input.style.backgroundPosition = "center";
+    input.style.backgroundRepeat = "no-repeat";
+  } else {
+    input.style.backgroundImage = "";
+  }
+}
+
+function toggleManualInput() {
+  const label = document.getElementById("itemRecipe").parentElement;
+  label.style.display = label.style.display === "none" ? "block" : "none";
 }
 
 document.getElementById("pasteArea").addEventListener("paste", function(event) {
@@ -70,7 +89,10 @@ function addItem() {
   document.getElementById("itemOutputCount").value = 1;
   document.getElementById("pasteArea").innerHTML = "Вставь изображение сюда";
   pastedImageURL = "";
-  grid.querySelectorAll("input").forEach(inp => inp.value = "");
+  grid.querySelectorAll("input").forEach(inp => {
+    inp.value = "";
+    updateCellImage(inp);
+  });
 }
 
 function renderItemList() {
@@ -115,6 +137,7 @@ function renderItemList() {
         const r = Math.floor(i / 9);
         const c = i % 9;
         inp.value = item.grid?.[r]?.[c] || "";
+        updateCellImage(inp);
       });
     };
     entry.appendChild(editBtn);
@@ -174,25 +197,25 @@ function calculateResources(rootId = null) {
   document.getElementById("result").innerHTML = `<h3>Изначальных предметов</h3>` + lines.join("<br>") + `<br><button onclick="exportInitialItems()">Выгрузить в JSON</button>`;
 }
 
-function exportInitialItems() {
-  const resultDiv = document.getElementById("result");
-  const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
-  const lines = withoutHeader.split("<br>");
-  const exportObj = {};
-  for (const line of lines) {
-    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
-    if (matches) {
-      const id = matches[1].trim();
-      const qty = Math.ceil(parseFloat(matches[2]));
-      exportObj[id] = qty;
+  function exportInitialItems() {
+    const resultDiv = document.getElementById("result");
+    const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
+    const lines = withoutHeader.split("<br>");
+    const exportArr = [];
+    for (const line of lines) {
+      const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
+      if (matches) {
+        const id = matches[1].trim().replace(/[<>]/g, "");
+        const qty = Math.ceil(parseFloat(matches[2]));
+        exportArr.push({ id, count: qty });
+      }
     }
+    const blob = new Blob([JSON.stringify(exportArr, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "initial_items.json";
+    a.click();
   }
-  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "initial_items.json";
-  a.click();
-}
 
 function exportData() {
   const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
