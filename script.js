@@ -8,10 +8,29 @@ for (let r = 0; r < 9; r++) {
   for (let c = 0; c < 9; c++) {
     const td = document.createElement("td");
     const input = document.createElement("input");
+    input.addEventListener("input", () => updateCellImage(input));
     td.appendChild(input);
     tr.appendChild(td);
   }
   grid.appendChild(tr);
+}
+
+function updateCellImage(input) {
+  const val = input.value.trim();
+  const item = items[val];
+  if (item && item.texture) {
+    input.style.backgroundImage = `url(${item.texture})`;
+    input.style.backgroundSize = "cover";
+    input.style.backgroundPosition = "center";
+    input.style.backgroundRepeat = "no-repeat";
+  } else {
+    input.style.backgroundImage = "";
+  }
+}
+
+function toggleManualInput() {
+  const label = document.getElementById("itemRecipe").parentElement;
+  label.style.display = label.style.display === "none" ? "block" : "none";
 }
 
 document.getElementById("pasteArea").addEventListener("paste", function(event) {
@@ -70,7 +89,10 @@ function addItem() {
   document.getElementById("itemOutputCount").value = 1;
   document.getElementById("pasteArea").innerHTML = "Вставь изображение сюда";
   pastedImageURL = "";
-  grid.querySelectorAll("input").forEach(inp => inp.value = "");
+  grid.querySelectorAll("input").forEach(inp => {
+    inp.value = "";
+    updateCellImage(inp);
+  });
 }
 
 function renderItemList() {
@@ -79,14 +101,19 @@ function renderItemList() {
 
   for (const id in items) {
     const item = items[id];
-    const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" onclick="calculateResources('${id}')" style="cursor:pointer;" />` : "";
-    const recipeText = item.components?.length > 0
+    const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" />` : "";
+    const hasComponents = item.components?.length > 0;
+    const recipeText = hasComponents
       ? item.components.map(c => `${c.qty}*${c.item}`).join(", ")
-      : "Рецепт через 9x9-сетку";
+      : "";
     const outputText = item.outputCount && item.outputCount > 1 ? ` (выход: ${item.outputCount})` : '';
     const entry = document.createElement("div");
     entry.className = "item-preview";
-    entry.innerHTML = `<strong> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}<br>Рецепт: ${recipeText}<br>`;
+    entry.innerHTML = `<strong class="item-header"> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}`;
+    if (recipeText) {
+      entry.innerHTML += `<br>Рецепт: ${recipeText}`;
+    }
+    entry.innerHTML += "<br>";
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Удалить";
@@ -110,11 +137,17 @@ function renderItemList() {
         const r = Math.floor(i / 9);
         const c = i % 9;
         inp.value = item.grid?.[r]?.[c] || "";
+        updateCellImage(inp);
       });
     };
     entry.appendChild(editBtn);
 
-    entry.addEventListener("click", () => calculateResources(id));
+    const header = entry.querySelector(".item-header");
+    if (header) {
+      header.style.cursor = "pointer";
+      header.addEventListener("click", () => calculateResources(id));
+    }
+
     container.appendChild(entry);
   }
 }
@@ -122,66 +155,101 @@ function renderItemList() {
 function calculateResources(rootId = null) {
   const result = {};
 
-  function normalizeId(input) {
-    return Object.keys(items).find(key => input && key.includes(input.trim()));
-  }
+function normalizeId(input) {
+  if (!input) return null;
+  const needle = input.trim();
+  const keys = Object.keys(items);
 
-  function collect(id, multiplier = 1) {
+  // 1) точное совпадение с учётом регистра
+  let k = keys.find(k => k === needle);
+  if (k) return k;
+
+  // 2) точное совпадение без учёта регистра
+  const low = needle.toLowerCase();
+  k = keys.find(k => k.toLowerCase() === low);
+  if (k) return k;
+
+  // 3) частичное совпадение без учёта регистра
+  k = keys.find(k => k.toLowerCase().includes(low));
+  return k || null;
+}
+
+  const baseCache = {};
+  function getBaseCounts(id, visited = new Set()) {
     const cleanId = normalizeId(id);
     if (!cleanId) {
-      console.warn('Неизвестный ID:', id);
-      result[id] = (result[id] || 0) + multiplier;
-      return;
+      return { [id]: 1 };
     }
+    if (baseCache[cleanId]) return baseCache[cleanId];
+    if (visited.has(cleanId)) return {};
+    visited.add(cleanId);
 
     const item = items[cleanId];
     const outputCount = item.outputCount || 1;
-    const normMultiplier = multiplier / outputCount;
+    const normMultiplier = 1 / outputCount;
     const isGridEmpty = item.grid.every(row => row.every(cell => cell === ""));
 
+    const base = {};
     if (item.components.length > 0) {
       for (const comp of item.components) {
-        collect(comp.item, comp.qty * normMultiplier);
+        const sub = getBaseCounts(comp.item, visited);
+        for (const k in sub) {
+          base[k] = (base[k] || 0) + sub[k] * comp.qty * normMultiplier;
+        }
       }
     } else if (!isGridEmpty) {
       const flat = item.grid.flat().filter(x => x);
       for (const subId of flat) {
-        collect(subId, normMultiplier);
+        const sub = getBaseCounts(subId, visited);
+        for (const k in sub) {
+          base[k] = (base[k] || 0) + sub[k] * normMultiplier;
+        }
       }
     } else {
-      result[cleanId] = (result[cleanId] || 0) + multiplier;
+      base[cleanId] = normMultiplier;
+    }
+
+    baseCache[cleanId] = base;
+    visited.delete(cleanId);
+    return base;
+  }
+
+  function addToResult(map, multiplier = 1) {
+    for (const k in map) {
+      result[k] = (result[k] || 0) + map[k] * multiplier;
     }
   }
 
   if (rootId) {
-    collect(rootId);
+    addToResult(getBaseCounts(rootId));
   } else {
     const lastId = document.getElementById("itemID").value.trim();
-    if (lastId) collect(lastId);
+    if (lastId) addToResult(getBaseCounts(lastId));
   }
 
-  const lines = Object.entries(result).map(([id, qty]) => {
-    const matchedId = normalizeId(id) || id;
-    const item = items[matchedId] || { name: matchedId, texture: "" };
-    return `<img src="${item.texture}" width="24" /> ${item.name || matchedId} | ${matchedId} | Кол-во: ${qty}`;
-  });
+const linesHtml = Object.entries(result).map(([rid, qty]) => {
+  const matchedId = normalizeId(rid) || rid;
+  const item = items[matchedId] || { name: matchedId, texture: "" };
+  const safeName = item.name || matchedId;
+  const img = item.texture ? `<img src="${item.texture}" width="24" />` : "";
+  return `<div class="res-line" data-id="${matchedId}" data-qty="${qty}">
+            ${img} ${safeName} | ${matchedId} | Кол-во: ${qty}
+          </div>`;
+}).join("");
 
-  document.getElementById("result").innerHTML = `<h3>Изначальных предметов</h3>` + lines.join("<br>") + `<br><button onclick="exportInitialItems()">Выгрузить в JSON</button>`;
+document.getElementById("result").innerHTML =
+  `<h3>Изначальных предметов</h3>${linesHtml}<br><button onclick="exportInitialItems()">Выгрузить в JSON</button>`;
 }
 
 function exportInitialItems() {
-  const resultDiv = document.getElementById("result");
-  const lines = resultDiv.innerHTML.split("<br>").slice(1); // пропускаем заголовок
-  const exportObj = {};
-  for (const line of lines) {
-    const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s(\d+)/);
-    if (matches) {
-      const id = matches[1].trim();
-      const qty = parseInt(matches[2], 10);
-      exportObj[id] = qty;
-    }
-  }
-  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+  const lines = Array.from(document.querySelectorAll("#result .res-line"));
+  const exportArr = lines.map(div => {
+    const id = div.getAttribute("data-id"); // регистр сохраняется
+    const qty = Math.ceil(parseFloat(div.getAttribute("data-qty") || "0"));
+    return { id: id.replace(/[<>]/g, ""), count: qty };
+  }).filter(x => x.id && x.count > 0);
+
+  const blob = new Blob([JSON.stringify(exportArr, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "initial_items.json";
@@ -196,6 +264,43 @@ function exportData() {
   a.click();
 }
 
+async function saveDataToSite() {
+  const data = JSON.stringify(items, null, 2);
+  try {
+    const response = await fetch('minecraft_craft_data (20).json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    });
+    if (!response.ok) throw new Error('Server error: ' + response.status);
+    alert('Файл на сайте обновлен');
+  } catch (err) {
+    console.error('Error saving data to site:', err);
+    alert('Не удалось обновить файл на сайте');
+  }
+}
+
+function downloadCraftsFile() {
+  const fileName = 'minecraft_craft_data (20).json';
+  fetch(encodeURI(fileName))
+    .then(r => r.blob())
+    .then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(err => console.error('Error downloading file:', err));
+}
+
+function clearData() {
+  for (const key in items) {
+    delete items[key];
+  }
+  renderItemList();
+}
+
 function importData(event) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -206,6 +311,20 @@ function importData(event) {
   };
   reader.readAsText(file);
 }
+
+function loadFromSite() {
+  fetch('minecraft_craft_data (20).json')
+    .then(r => r.json())
+    .then(data => {
+      Object.assign(items, data);
+      renderItemList();
+    })
+    .catch(err => console.error('Error loading default data:', err));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadFromSite();
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {

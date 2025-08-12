@@ -13,7 +13,12 @@
 <div class="card">
 <h3>💾 Сохранение и загрузка</h3>
 <button onclick="exportData()">💾 Экспорт JSON</button>
-<input id="loadFile" onchange="importData(event)" type="file"/>
+<button onclick="loadFromSite()">Загрузить с сайта</button>
+<button onclick="saveDataToSite()">Сохранить на сайте</button>
+<button onclick="downloadCraftsFile()" style="display:none;">Скачать готовый набор крафтов</button>
+<button onclick="clearData()">Очистка</button>
+<label for="loadFile" class="file-input-btn">Выберите файл</label>
+<input id="loadFile" onchange="importData(event)" type="file" style="display:none"/>
 </div>
 <div class="wide-card">
 <h3>📦 Все предметы:</h3>
@@ -35,6 +40,7 @@
 <label>Имя: <input id="itemName"/></label><br/>
 <label>ID: <input id="itemID"/></label><br/>
 <label>Кол-во на выходе: <input id="itemOutputCount" min="1" style="width:60px" type="number" value="1"/></label><br/>
+<button id="manualInputBtn" onclick="toggleManualInput()">Ручной ввод</button>
 <label style="display:none;">Текстовый рецепт:
           <textarea id="itemRecipe" placeholder="например: 2*Железо,1*Палка" rows="2" style="width:92%;"></textarea>
 </label>
@@ -42,23 +48,25 @@
 </div>
 <!-- Правая панель -->
 <div class="right-panel">
-<div style="display: flex; flex-direction: row; gap: 16px; align-items: stretch; width: 100%;">
-<div class="card" style="width:490px; max-width:620px;">
-<h3>🖼️ Вставь изображение Ctrl+V</h3>
-<div contenteditable="true" id="pasteArea">Вставь изображение сюда</div>
-</div>
-<div class="output-card" id="result" style="min-width:370px; background:#e0e1e6; color:#151618;">
-<h3>Изначальных предметов</h3>
-</div>
-</div>
-<div class="card" style="align-items:center; width:300px; max-width:340px; margin-top:20px;">
-<h3 style="text-align:center;">🛠️ Верстак 9×9</h3>
-<table id="craftGrid"><tbody></tbody></table>
-<div class="buttons-row">
-<button onclick="addItem()">Добавить предмет</button>
-<button onclick="calculateResources()">📊 Посчитать ресурсы</button>
-</div>
-</div>
+  <div style="display: flex; flex-direction: row; gap: 16px; align-items: flex-start; width: 100%;">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="card" style="width:490px; max-width:620px;">
+        <h3>🖼️ Вставь изображение Ctrl+V</h3>
+        <div contenteditable="true" id="pasteArea">Вставь изображение сюда</div>
+      </div>
+      <div class="card" style="align-items:center; width:380px; max-width:380px;">
+        <h3 style="text-align:center;">🛠️ Верстак 9×9</h3>
+        <table id="craftGrid"><tbody></tbody></table>
+        <div class="buttons-row">
+          <button onclick="addItem()">Добавить предмет</button>
+          <button onclick="calculateResources()" style="display:none;">📊 Посчитать ресурсы</button>
+        </div>
+      </div>
+    </div>
+    <div class="output-card" id="result" style="min-width:370px; background:#CCFFFF; color:#151618;">
+      <h3>Изначальных предметов</h3>
+    </div>
+  </div>
 </div>
 </div>
 
