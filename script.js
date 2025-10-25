@@ -101,7 +101,7 @@ function renderItemList() {
 
   for (const id in items) {
     const item = items[id];
-    const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" onclick="calculateResources('${id}')" style="cursor:pointer;" />` : "";
+    const imgHTML = item.texture ? `<img src="${item.texture}" alt="${item.name}" />` : "";
     const hasComponents = item.components?.length > 0;
     const recipeText = hasComponents
       ? item.components.map(c => `${c.qty}*${c.item}`).join(", ")
@@ -109,7 +109,7 @@ function renderItemList() {
     const outputText = item.outputCount && item.outputCount > 1 ? ` (выход: ${item.outputCount})` : '';
     const entry = document.createElement("div");
     entry.className = "item-preview";
-    entry.innerHTML = `<strong> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}`;
+    entry.innerHTML = `<strong class="item-header"> ${imgHTML} ${item.name}</strong> [${id}] ${outputText}`;
     if (recipeText) {
       entry.innerHTML += `<br>Рецепт: ${recipeText}`;
     }
@@ -142,7 +142,12 @@ function renderItemList() {
     };
     entry.appendChild(editBtn);
 
-    entry.addEventListener("click", () => calculateResources(id));
+    const header = entry.querySelector(".item-header");
+    if (header) {
+      header.style.cursor = "pointer";
+      header.addEventListener("click", () => calculateResources(id));
+    }
+
     container.appendChild(entry);
   }
 }
@@ -150,9 +155,24 @@ function renderItemList() {
 function calculateResources(rootId = null) {
   const result = {};
 
-  function normalizeId(input) {
-    return Object.keys(items).find(key => input && key.includes(input.trim()));
-  }
+function normalizeId(input) {
+  if (!input) return null;
+  const needle = input.trim();
+  const keys = Object.keys(items);
+
+  // 1) точное совпадение с учётом регистра
+  let k = keys.find(k => k === needle);
+  if (k) return k;
+
+  // 2) точное совпадение без учёта регистра
+  const low = needle.toLowerCase();
+  k = keys.find(k => k.toLowerCase() === low);
+  if (k) return k;
+
+  // 3) частичное совпадение без учёта регистра
+  k = keys.find(k => k.toLowerCase().includes(low));
+  return k || null;
+}
 
   const baseCache = {};
   function getBaseCounts(id, visited = new Set()) {
@@ -207,34 +227,34 @@ function calculateResources(rootId = null) {
     if (lastId) addToResult(getBaseCounts(lastId));
   }
 
-  const lines = Object.entries(result).map(([id, qty]) => {
-    const matchedId = normalizeId(id) || id;
-    const item = items[matchedId] || { name: matchedId, texture: "" };
-    return `<img src="${item.texture}" width="24" /> ${item.name || matchedId} | ${matchedId} | Кол-во: ${qty}`;
-  });
+const linesHtml = Object.entries(result).map(([rid, qty]) => {
+  const matchedId = normalizeId(rid) || rid;
+  const item = items[matchedId] || { name: matchedId, texture: "" };
+  const safeName = item.name || matchedId;
+  const img = item.texture ? `<img src="${item.texture}" width="24" />` : "";
+  return `<div class="res-line" data-id="${matchedId}" data-qty="${qty}">
+            ${img} ${safeName} | ${matchedId} | Кол-во: ${qty}
+          </div>`;
+}).join("");
 
-  document.getElementById("result").innerHTML = `<h3>Изначальных предметов</h3>` + lines.join("<br>") + `<br><button onclick="exportInitialItems()">Выгрузить в JSON</button>`;
+document.getElementById("result").innerHTML =
+  `<h3>Изначальных предметов</h3>${linesHtml}<br><button onclick="exportInitialItems()">Выгрузить в JSON</button>`;
 }
 
-  function exportInitialItems() {
-    const resultDiv = document.getElementById("result");
-    const withoutHeader = resultDiv.innerHTML.replace(/<h3[^>]*>.*?<\/h3>/, "");
-    const lines = withoutHeader.split("<br>");
-    const exportArr = [];
-    for (const line of lines) {
-      const matches = line.match(/\|\s(.+?)\s\|\sКол-во:\s([\d.]+)/);
-      if (matches) {
-        const id = matches[1].trim().replace(/[<>]/g, "");
-        const qty = Math.ceil(parseFloat(matches[2]));
-        exportArr.push({ id, count: qty });
-      }
-    }
-    const blob = new Blob([JSON.stringify(exportArr, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "initial_items.json";
-    a.click();
-  }
+function exportInitialItems() {
+  const lines = Array.from(document.querySelectorAll("#result .res-line"));
+  const exportArr = lines.map(div => {
+    const id = div.getAttribute("data-id"); // регистр сохраняется
+    const qty = Math.ceil(parseFloat(div.getAttribute("data-qty") || "0"));
+    return { id: id.replace(/[<>]/g, ""), count: qty };
+  }).filter(x => x.id && x.count > 0);
+
+  const blob = new Blob([JSON.stringify(exportArr, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "initial_items.json";
+  a.click();
+}
 
 function exportData() {
   const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
